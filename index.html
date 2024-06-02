@@ -3,9 +3,299 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>index</title>
+	<title>index-html</title>
+
+<style type="text/css">
+	
+*
+{
+	padding: 0px;
+	margin: 0px;
+	box-sizing: border-box;
+
+	font-family: monospace;
+
+	text-decoration: none;
+	color:  #DBDEE1;
+}
+
+
+body
+{
+	--col-0a	: #151515;
+	--col-0 	: #313338;
+	--col-1 	: #1e1f22;
+	--col-2 	: #2b2d31;
+	--col-100 	: #DBDEE1;
+	--col-101 	: #5a5a5b;
+	
+	background-color: var(--col-0a);
+
+	
+}
+
+
+
+.input-container
+{
+	display: flex;;
+	width: calc(100vw - 2rem);
+	max-width: 60rem;
+
+	margin: 1rem auto;
+	background-color: var(--col-1);
+	border-radius: 1rem;
+}
+
+.input-container > .input-text
+{
+	display: block;
+	flex: 1 1 auto;
+	padding: 1rem;
+
+	font-size: 1.1rem;
+	font-weight: bold;
+	color: var(--col-100);
+
+	text-align: center;
+
+	background-color: transparent;
+	border: none;
+}
+
+
+.input-container > .input-text:focus
+{
+	outline: none;
+}
+
+
+
+.input-container > .input-btn
+{
+	display: block;
+	width: 7rem;
+
+	flex: 0 0 auto;
+
+	padding: 0.5rem;
+	font-size: 1.1rem;
+	font-weight: bold;
+	color: var(--col-101);
+
+	background-color: transparent;
+	border: none;
+}
+
+
+</style>
+
+
 </head>
 <body>
+
+
+
+<div class="input-container container">
+	<input class="input-text" type="text" placeholder="enter the text....">
+	<input class="input-btn" type="button" 	value="search" 	name="">
+</div>
+
+<pre></pre>
+
+
+<script type="text/javascript">
+	
+
+
+
+// effect //
+	function typewriter_animate_text(S)
+	{
+		// let str = S.innerHTML;
+		let str = S.getAttribute("placeholder");
+
+
+
+		let index = 0;
+		let _interval = setInterval
+		(
+			function()
+			{
+				if(index >= str.length)
+				{
+					S.innerHTML = str;
+					clearInterval(_interval);
+				}
+
+				let new_str = "";
+				let rand_chars = str + "0_-AXZNUO";
+
+				for(let i0 = 0 ; i0 < str.length; i0 += 1)
+				{
+					if(i0 <= index)
+					{
+						new_str += str[i0];
+					}
+					else
+					{
+						new_str += rand_chars[Math.floor(Math.random() * rand_chars.length)];
+					}
+					//
+				}
+				S.setAttribute("placeholder" , new_str);
+
+
+				// let di = lerp(0.3 , 2 , index / str.length);
+				index += 1.2;
+			}
+			,30
+		);
+
+	}
+
+	function lerp(a , b , t)
+	{
+		let n = b - a;
+		return a + n * t;
+	}
+
+// effect //
+
+typewriter_animate_text(document.querySelector(".input-text"));
+
+
+
+function encr(str)
+{
+	let new_str = "";
+
+	//
+	for(let i0 = 0 ; i0 < str.length ; i0 += 1)
+	{
+		//
+		if( str[i0] == ' ' 	||
+			str[i0] == '\n' ||
+			str[i0] == '\t' ||
+			str[i0] == '_' )
+		{
+			new_str += str[i0];
+			continue;
+		}
+		else
+		{
+			let char_code = str[i0].charCodeAt(0);
+			new_str +=	String.fromCharCode(char_code + 1); 
+			//
+		}
+		//
+	}
+	//
+
+	return new_str;
+}
+
+function decr(str)
+{
+	let new_str = "";
+
+	//
+	for(let i0 = 0 ; i0 < str.length ; i0 += 1)
+	{
+		//
+		if( str[i0] == ' ' 	||
+			str[i0] == '\n' ||
+			str[i0] == '\t' ||
+			str[i0] == '_' )
+		{
+			new_str += str[i0];
+			continue;
+		}
+		else
+		{
+			let char_code = str[i0].charCodeAt(0);
+			new_str +=	String.fromCharCode(char_code - 1); 
+			//
+		}
+		//
+	}
+	//
+
+	return new_str;
+}
+
+
+
+let cred_str =
+`judi jp
+	H				V					Q
+	lbfzb111		bo.bmdi4njtu		_judi/jp_1
+	hfutfuhp3129	qspdfevsbm.tnjmf	_judi/jp_1
+	qfxe4qj4		kvtubofx			_judi/jp_1
+
+H
+	hfutfuhp3129				_Wpyfm_1
+	lbfzb111	 				_Wpyfm_1
+	bmhpsjuinqmbofu				_Wpyfm_1
+	nbsdijohdsbgu				_Wpyfm_1
+	kvtubofx1					_Mphjo_1
+
+HjuIvc
+	lbfzb111			bo.bmdi4njtu		_HjuIvc_1
+	bmhpsjuinqmbofu		bmhpsjuin.qbofu		_HjuIvc_1
+
+Ejtdpse
+	bmhpsjuinqmbofu		kvtubxibufwfs		_HjuIvc_1
+	qfxe4qj4			opy					_HjuIvc_1
+	hfutfuhp3129		zvnjlp				_HjuIvc_1
+	lbfzb111			lbfzb.bmc4sjdi		_HjuIvc_1		
+
+
+Ux
+	bmhpsjuinqmbofu		nbsdijohdsbgu		_u.....s_1		
+
+Jo
+	nbsdijohdsbgu		kvtubofx_			_Jo'''''bn_1
+
+Tufbn
+	bmhpsjuinqmbofu		nbsdijohdsbgu		_Tufbn_1
+
+ufus/jp
+	lbfzb111			kvtubofx_			UFUS_JP
+						ktusjt_1
+
+qbzqm	
+															Col
+	kvtubofx1								_MPHJO_1		gesm`;
+
+
+
+document.querySelector(".input-container > .input-btn").onclick = function()
+{
+	//
+	// console.log("input-btn....submit");
+
+	let input_text_elem = document.querySelector(".input-container > .input-text")
+	//
+	if( encr(input_text_elem.value) == "{fsp" )
+	{
+		//
+		console.log("matched....");
+		console.log(decr(cred_str));
+	}
+	else
+	{
+		//
+		console.log("not-matched....");
+		console.log("sure....");
+	}
+	//
+
+}
+
+
+
+</script>
 
 
 </body>
