@@ -224,6 +224,16 @@ function decr(str)
 	return new_str;
 }
 
+/*
+let en = encr("zero");
+let de = decr(en);
+
+console.log(en);
+console.log(de);
+*/
+
+
+
 
 
 let cred_str =
@@ -280,13 +290,17 @@ document.querySelector(".input-container > .input-btn").onclick = function()
 	if( encr(input_text_elem.value) == "{fsp" )
 	{
 		//
-		console.log("matched....");
-		console.log(decr(cred_str));
+		console.log("%cMatched" , "font-size: 2.5rem; font-weight: bold; color:#e02344;");
+		console.log(decr(cred_str) , "white-space:pre");
 	}
 	else
 	{
 		//
-		console.log("not-matched....");
+		console.log("%caccess - denied", `padding:0.5rem;font-size: 2.5rem; font-weight: bold; color:#e0e0e0; background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 5px,
+    red 5px 8px
+  );`);
 		console.log("sure....");
 	}
 	//
