@@ -26,8 +26,8 @@ body
 	--col-0 	: #313338;
 	--col-1 	: #1e1f22;
 	--col-2 	: #2b2d31;
-	--col-100 	: #DBDEE1;
-	--col-101 	: #5a5a5b;
+	--col-100 	: #5a5a5b;
+	--col-101 	: #DBDEE1;
 	
 	background-color: var(--col-0a);
 
@@ -55,7 +55,7 @@ body
 
 	font-size: 1.1rem;
 	font-weight: bold;
-	color: var(--col-100);
+	color: var(--col-101);
 
 	text-align: center;
 
@@ -71,7 +71,7 @@ body
 
 
 
-.input-container > .input-btn
+.input-container > .pass-btn
 {
 	display: block;
 	width: 7rem;
@@ -81,14 +81,130 @@ body
 	padding: 0.5rem;
 	font-size: 1.1rem;
 	font-weight: bold;
-	color: var(--col-101);
+	color: var(--col-100);
 
 	background-color: transparent;
 	border: none;
 }
 
 
+
+/* encr - btn */
+
+.encr-btn-container
+{
+	display: block;
+	margin: 1rem auto;
+
+	width: calc(100vw - 2rem);
+	max-width: 60rem;
+	border-radius: 1rem;
+
+	background-color: var(--col-1);
+
+}
+
+
+
+
+
+.encr-btn-container > .encr-btn
+{
+	display: block;
+	padding: 1rem;
+	
+	color: var(--col-100);
+	background-color: transparent;
+	border: none;
+
+	font-family: monospace;
+	font-weight: bold;
+	font-size: 1.1rem;
+
+	width: 100%;
+
+	animation: glow 2s ease-in alternate infinite;
+}
+
+
+
+.encr-btn-container > .input-text , .encr-text
+{
+	display: block;
+	padding: 1rem;
+	width: 100%;
+
+
+	background-color: transparent;
+	border: none;
+
+	outline: none;
+
+	font-family: monospace;
+	font-weight: bold;
+	font-size: 1.1rem;
+
+	resize: vertical;
+	min-height: 10rem;
+
+
+}
+
+.encr-btn-container > .input-text::placeholder , .encr-text::placeholder
+{
+	text-align: center;
+}
+
+
+
+.encr-btn-container > .input-text
+{
+	border-top: 2px solid var(--col-100);
+}
+
+.encr-btn-container > .encr-text
+{
+	border-top: 2px dashed var(--col-100);
+}
+
+/* encr - btn */
+
+
+
+
+
+
+
+.input-encr-container > .input-text , .encr-text
+{
+	background-color: transparent;
+	display: block;
+}
+
+
+
+@keyframes glow
+{
+	from { color : var(--col-100);  }
+	from { color : var(--col-101);  }
+}
+
 </style>
+
+
+<style type="text/css">
+	#none
+	{
+		display: none
+	}
+
+	#block
+	{
+		display: block;
+	}
+</style>
+
+
 
 
 </head>
@@ -98,8 +214,17 @@ body
 
 <div class="input-container container">
 	<input class="input-text" type="text" placeholder="enter the text....">
-	<input class="input-btn" type="button" 	value="search" 	name="">
+	<input class="pass-btn" type="button" 	value="search" 	name="">
 </div>
+
+
+<div class="encr-btn-container">
+	<input class="encr-btn" type="button"  value="encr">
+	<textarea id="none" class="input-text" placeholder="enter-text" rows="5" ></textarea>
+	<textarea id="none" class="encr-text" placeholder="encr text diplayed here...." rows="5" ></textarea>
+</div>
+
+
 
 <pre></pre>
 
@@ -289,12 +414,10 @@ Csbwf
 
 
 
-
-
-document.querySelector(".input-container > .input-btn").onclick = function()
+document.querySelector(".input-container > .pass-btn").onclick = function()
 {
 	//
-	// console.log("input-btn....submit");
+	// console.log("pass-btn....submit");
 
 	let input_text_elem = document.querySelector(".input-container > .input-text")
 	//
@@ -323,7 +446,33 @@ document.querySelector(".input-container > .input-btn").onclick = function()
 
 
 
+/*
+TODO
+	get encryption for a given str
+*/
 
+let toggle_encr_input_text = false;
+document.querySelector(".encr-btn-container > .encr-btn").onclick = function()
+{
+	toggle_encr_input_text = !toggle_encr_input_text;
+
+	let dislay = (toggle_encr_input_text)? "block" : "none";
+	document.querySelector(".encr-btn-container > .input-text").setAttribute("id" , dislay);
+	document.querySelector(".encr-btn-container > .encr-text").setAttribute("id" , dislay);
+
+	document.querySelector(".encr-btn-container > .encr-btn").value = (toggle_encr_input_text)? "close x" : "encr";
+}
+
+
+document.querySelector(".encr-btn-container > .input-text").onclick  = function ()
+{
+	console.table("typing....");
+
+	let input_text_e = document.querySelector(".encr-btn-container > .input-text");
+	let encr_text_e	 = document.querySelector(".encr-btn-container > .encr-text" );
+
+	encr_text_e.value = encr(input_text_e.value);
+}
 
 
 
