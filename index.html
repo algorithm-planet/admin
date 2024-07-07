@@ -164,7 +164,7 @@ body
 
 .encr-btn-container > .encr-text
 {
-	border-top: 2px dashed var(--col-100);
+	border-top: 2px dotted var(--col-100);
 }
 
 /* encr - btn */
@@ -188,6 +188,30 @@ body
 	from { color : var(--col-100);  }
 	from { color : var(--col-101);  }
 }
+
+
+textarea::-webkit-scrollbar 
+{
+    width: 1em;
+}
+
+textarea::-webkit-scrollbar-track 
+{
+/*    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);*/
+}
+
+textarea::-webkit-scrollbar-thumb 
+{
+	border-top: 2px solid var(--col-100);
+  	background-color: var(--col-100);
+  	width: 0.2rem;
+}
+
+textarea::-webkit-resizer {
+  background-color: var(--col-100);
+  display: block;
+}
+
 
 </style>
 
@@ -473,6 +497,8 @@ document.querySelector(".encr-btn-container > .input-text").onclick  = function 
 
 	encr_text_e.value = encr(input_text_e.value);
 }
+
+
 
 
 
