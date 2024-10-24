@@ -13,7 +13,10 @@
 	margin: 0px;
 	box-sizing: border-box;
 
+	/* general font	*/
 	font-family: monospace;
+	font-size: 1rem;
+	/* general font	*/
 
 	text-decoration: none;
 	color:  #DBDEE1;
@@ -316,8 +319,8 @@ typewriter_animate_text(document.querySelector(".input-text"));
 
 
 
-
-
+// ascii(9) + 1 -> asci(:) , : is excluded , so decr shall result in : instead of 9
+let exlusion = " \n\t_:9";
 
 function encr(str)
 {
@@ -327,10 +330,7 @@ function encr(str)
 	for(let i0 = 0 ; i0 < str.length ; i0 += 1)
 	{
 		//
-		if( str[i0] == ' ' 	||
-			str[i0] == '\n' ||
-			str[i0] == '\t' ||
-			str[i0] == '_' )
+		if( exlusion.includes(str[i0]) )
 		{
 			new_str += str[i0];
 			continue;
@@ -356,10 +356,7 @@ function decr(str)
 	for(let i0 = 0 ; i0 < str.length ; i0 += 1)
 	{
 		//
-		if( str[i0] == ' ' 	||
-			str[i0] == '\n' ||
-			str[i0] == '\t' ||
-			str[i0] == '_' )
+		if ( exlusion.includes(str[i0]) ) 
 		{
 			new_str += str[i0];
 			continue;
@@ -388,53 +385,136 @@ console.log(de);
 
 
 
-
 let cred_str =
 `judi jp
-	H						V						Q
-	lbfzb111				bo.bmdi4njtu			_judi/jp_1
-	hfutfuhp3129			qspdfevsbm.tnjmf		_judi/jp_1
-	qfxe4qj4,)qbzqm.jou*	kvtubofx				_judi/jp_1 
+				H : lbfzb111
+				V : bo.bmdi4njtu
+				Q : _judi/jp_1
 
-H	
-	hfutfuhp3129									_Wpyfm_1
-	lbfzb111	 									_Wpyfm_1
-	bmhpsjuinqmbofu									_Wpyfm_1
-	nbsdijohdsbgu									_Wpyfm_1
-	kvtubofx1										_Mphjo_1
-		
-HjuIvc																																				
-	lbfzb111				bo.bmdi4njtu			_HjuIvc_1
-	bmhpsjuinqmbofu			bmhpsjuin.qbofu			_HjuIvc_1
+				H : hfutfuhp3129
+				V : qspdfevsbm.tnjmf
+				Q : _judi/jp_1
+
+				H : qfxe4qj4,)qbzqm.jou*
+				V : kvtubofx
+				Q : _judi/jp_1
+
+H
+				H : hfutfuhp3129
+				Q : _Wpyfm_1
+
+				H : lbfzb111
+				Q : _Wpyfm_1
+
+				H : bmhpsjuinqmbofu
+				Q : _Wpyfm_1
+
+				H : nbsdijohdsbgu
+				Q : _Wpyfm_1
+
+				H : kvtubofx1
+				Q : _Mphjo_1
+
+HjuIvc
+				H : lbfzb111
+				V : bo.bmdi4njtu
+				Q _HjuIvc_1
+
+				H : bmhpsjuinqmbofu 
+				V : bmhpsjuin.qbofu )benjo.tpvsdf*
+				Q : _HjuIvc_1
 
 Ejtdpse
-	bmhpsjuinqmbofu			kvtubxibufwfs			_HjuIvc_1
-	qfxe4qj4				opy						_HjuIvc_1
-	hfutfuhp3129			zvnjlp					_HjuIvc_1
-	lbfzb111				lbfzb.bmc4sjdi			_HjuIvc_1		
+				H : bmhpsjuinqmbofu
+				V : kvtubxibufwfs
+				Q : _HjuIvc_1
+
+				H : qfxe4qj4
+				V : opy
+				Q : _HjuIvc_1
+
+				H : hfutfuhp3129
+				V : zvnjlp
+				Q : _HjuIvc_1
+
+				H : lbfzb111
+				V : lbfzb.bmc4sjdi
+				Q : _HjuIvc_1
 
 Ux
-	bmhpsjuinqmbofu			nbsdijohdsbgu			_u.....s_1		
+				H : bmhpsjuinqmbofu
+				V : nbsdijohdsbgu
+				Q : _u.....s_1
 
 Jo
-	nbsdijohdsbgu			kvtubofx_				_Jo'''''bn_1
+				H : nbsdijohdsbgu
+				V : kvtubofx_
+				Q : _Jo'''''bn_1
+
+UjlUpl
+				H : qfxe4qj4
+				V : 
+				Q : _UjlUpl_1
+
 xfcuppo
-	qfxe4qj4				opy.1					_XfcUppo_1
+				H : qfxe4qj4
+				V : opy.1		
+				Q : _XfcUppo_1
+
+Tqpujgz
+				H : qfxe4qj4
+				V : kvtubofx_			
+				Q : _QbtufCjo_11
+
 Tufbn
-	bmhpsjuinqmbofu			nbsdijohdsbgu			_Tufbn_1
+				H : bmhpsjuinqmbofu
+				V : nbsdijohdsbgu			
+				Q : _Tufbn_1
+
+Bsutubujpo
+				H : qfxe4qj4
+				V : opy			
+				Q : _BsuTubujpo_1
+
+qpmjjhpo
+				H : qfxe4qj4
+				V : 
+				Q : _Qpmjjhpo_1	
+
+CmfoeTxbq
+				H : bmhpsjuinqmbofu	
+				V : 
+				Q : _CmfoeTxbq_11
+
+VtfsCfodinbsl
+				H : qfxe4qj4	
+				V : kvtubofx
+				Q : Cfodinbsl_1
 
 ufus/jp
-	lbfzb111				kvtubofx_				UFUS_JP
-							ktusjt_1
+				H : lbfzb111	
+				V : kvtubofx_
+				Q : UFUS_JP
 
-qbzqm																	Col
-	kvtubofx1										_MPHJO_1			gesm
+				H : lbfzb111	
+				V : kvtubofx_
+				Q : ktusjt_1
 
-Csbwf	
-													Csbwf_Xbmmfu
-							tboe dpggff uisjwf  tppo gpttjm xijq  evdl tmffq xftu  pggjdf frvjq qsfwfou
-	cd2rmuk9myfwxg68un:3et8{:knnlfxm9uqmwkzuds`;
+njoftxffqfs
+				H : lbfzb111	
+				V : kvtubofx_
+				Q : NJOF_TXFFQFS
 
+qbzqm	
+				H : kvtubofx1	
+				V : 
+				Q : _MPHJO_1
+				Col : gesm
+
+Csbwf_Xbmmfu
+				qisbtf : tboe dpggff uisjwf   tppo gpttjm xijq   evdl tmffq xftu   pggjdf frvjq qsfwfou
+				beesftt : cd2rmuk9myfwxg68un93et8{9knnlfxm9uqmwkzuds
+				obwjhbuf : )tfuujoh ? cbdlvq*`;
 
 
 
@@ -450,7 +530,7 @@ document.querySelector(".input-container > .pass-btn").onclick = function()
 		//
 		console.clear();
 		console.log("%cMatched" , "font-size: 2.5rem; font-weight: bold; color:#e02344;");
-		console.log(decr(cred_str) , "white-space:pre");
+		console.log(decr(cred_str));
 	}
 	else
 	{
@@ -478,29 +558,25 @@ TODO
 let toggle_encr_input_text = false;
 document.querySelector(".encr-btn-container > .encr-btn").onclick = function()
 {
-	toggle_encr_input_text = !toggle_encr_input_text;
+		toggle_encr_input_text = !toggle_encr_input_text;
 
-	let dislay = (toggle_encr_input_text)? "block" : "none";
-	document.querySelector(".encr-btn-container > .input-text").setAttribute("id" , dislay);
-	document.querySelector(".encr-btn-container > .encr-text").setAttribute("id" , dislay);
+		let dislay = (toggle_encr_input_text)? "block" : "none";
+		document.querySelector(".encr-btn-container > .input-text").setAttribute("id" , dislay);
+		document.querySelector(".encr-btn-container > .encr-text").setAttribute("id" , dislay);
 
-	document.querySelector(".encr-btn-container > .encr-btn").value = (toggle_encr_input_text)? "close x" : "encr";
+		document.querySelector(".encr-btn-container > .encr-btn").value = (toggle_encr_input_text)? "close x" : "encr";
 }
 
 
 document.querySelector(".encr-btn-container > .input-text").onclick  = function ()
 {
-	console.table("typing....");
+		console.table("typing....");
 
-	let input_text_e = document.querySelector(".encr-btn-container > .input-text");
-	let encr_text_e	 = document.querySelector(".encr-btn-container > .encr-text" );
+		let input_text_e = document.querySelector(".encr-btn-container > .input-text");
+		let encr_text_e	 = document.querySelector(".encr-btn-container > .encr-text" );
 
-	encr_text_e.value = encr(input_text_e.value);
+		encr_text_e.value = encr(input_text_e.value);
 }
-
-
-
-
 
 </script>
 
