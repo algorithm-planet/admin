@@ -1,0 +1,6 @@
+# Ignore all unencrypted data files anywhere in repo
+**/data.txt
+data.txt
+
+# Keep encrypted versions
+!**/*.enc
