@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Encryptor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #58a6ff;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #8b949e;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #c9d1d9;
+    }
+    input[type="password"], textarea {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: #c9d1d9;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    input[type="password"]:focus, textarea:focus {
+      outline: none;
+      border-color: #58a6ff;
+    }
+    textarea {
+      min-height: 200px;
+      resize: vertical;
+    }
+    button {
+      width: 100%;
+      background: #238636;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #2ea043;
+    }
+    button:active {
+      background: #1a7f37;
+    }
+    .status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: none;
+    }
+    .status.success {
+      background: #1a472a;
+      border: 1px solid #2ea043;
+      color: #4ae168;
+    }
+    .status.error {
+      background: #3d1418;
+      border: 1px solid #da3633;
+      color: #ff7b72;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔒 Data Encryptor</h1>
+    <p class="subtitle">Encrypt your data locally. Never commit this file to GitHub.</p>
+    
+    <label for="data">Your Data (Plaintext)</label>
+    <textarea id="data" placeholder="Paste your crucial data here..."></textarea>
+    
+    <label for="password">Encryption Password</label>
+    <input type="password" id="password" placeholder="Choose a strong password">
+    
+    <button onclick="encryptData()">Encrypt & Download</button>
+    
+    <div id="status" class="status"></div>
+  </div>
+
+  <script>
+    async function encryptData() {
+      const data = document.getElementById('data').value;
+      const password = document.getElementById('password').value;
+      const status = document.getElementById('status');
+      
+      if (!data || !password) {
+        showStatus('Please fill in both fields', 'error');
+        return;
+      }
+      
+      let minLength = 4;
+      if (password.length < minLength) {
+        showStatus(`Password should be at least ${minLength} characters`, 'error');
+        return;
+      }
+      
+      try {
+        const enc = new TextEncoder();
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        
+        const keyMaterial = await crypto.subtle.importKey(
+          'raw',
+          enc.encode(password),
+          'PBKDF2',
+          false,
+          ['deriveBits', 'deriveKey']
+        );
+        
+        const key = await crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: salt,
+            iterations: 100000,
+            hash: 'SHA-256'
+          },
+          keyMaterial,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['encrypt']
+        );
+        
+        const encrypted = await crypto.subtle.encrypt(
+          { name: 'AES-GCM', iv: iv },
+          key,
+          enc.encode(data)
+        );
+        
+        const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+        combined.set(salt, 0);
+        combined.set(iv, salt.length);
+        combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+        
+        const base64 = btoa(String.fromCharCode(...combined));
+        
+        const blob = new Blob([base64], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'data.txt.enc';
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        showStatus('✓ Encrypted! File downloaded as data.txt.enc', 'success');
+      } catch (err) {
+        showStatus('Encryption failed: ' + err.message, 'error');
+      }
+    }
+    
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = 'status ' + type;
+      status.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Data Viewer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #58a6ff;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #8b949e;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #c9d1d9;
+    }
+    input[type="password"] {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: #c9d1d9;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #58a6ff;
+    }
+    button {
+      width: 100%;
+      background: #238636;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #2ea043;
+    }
+    button:active {
+      background: #1a7f37;
+    }
+    button:disabled {
+      background: #21262d;
+      color: #484f58;
+      cursor: not-allowed;
+    }
+    .status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: none;
+    }
+    .status.error {
+      background: #3d1418;
+      border: 1px solid #da3633;
+      color: #ff7b72;
+    }
+    .data-view {
+      display: none;
+      margin-top: 24px;
+    }
+    .data-content {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 16px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .data-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .data-content::-webkit-scrollbar-track {
+      background: #161b22;
+    }
+    .data-content::-webkit-scrollbar-thumb {
+      background: #30363d;
+      border-radius: 4px;
+    }
+    .lock-icon {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><span class="lock-icon">🔐</span>Secure Data Viewer</h1>
+    <p class="subtitle">Enter your password to decrypt and view your data</p>
+    
+    <div id="login-form">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter decryption password" onkeypress="handleKeyPress(event)">
+      
+      <button id="decrypt-btn" onclick="decryptData()">Decrypt Data</button>
+      
+      <div id="status" class="status"></div>
+    </div>
+    
+    <div id="data-view" class="data-view">
+      <label>Your Decrypted Data</label>
+      <div id="data-content" class="data-content"></div>
+    </div>
+  </div>
+
+  <script>
+    let encryptedData = null;
+
+    async function loadEncryptedFile() {
+      try {
+        const response = await fetch('data.txt.enc');
+        if (!response.ok) throw new Error('File not found');
+        encryptedData = await response.text();
+      } catch (err) {
+        showStatus('Error: Could not load data.txt.enc. Make sure it exists in your repo.', 'error');
+        document.getElementById('decrypt-btn').disabled = true;
+      }
+    }
+
+    async function decryptData() {
+      const password = document.getElementById('password').value;
+      const status = document.getElementById('status');
+      
+      if (!password) {
+        showStatus('Please enter a password', 'error');
+        return;
+      }
+      
+      if (!encryptedData) {
+        showStatus('Encrypted file not loaded', 'error');
+        return;
+      }
+      
+      try {
+        const combined = Uint8Array.from(atob(encryptedData), c => c.charCodeAt(0));
+        
+        const salt = combined.slice(0, 16);
+        const iv = combined.slice(16, 28);
+        const encrypted = combined.slice(28);
+        
+        const enc = new TextEncoder();
+        const keyMaterial = await crypto.subtle.importKey(
+          'raw',
+          enc.encode(password),
+          'PBKDF2',
+          false,
+          ['deriveBits', 'deriveKey']
+        );
+        
+        const key = await crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: salt,
+            iterations: 100000,
+            hash: 'SHA-256'
+          },
+          keyMaterial,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['decrypt']
+        );
+        
+        const decrypted = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: iv },
+          key,
+          encrypted
+        );
+        
+        const dec = new TextDecoder();
+        const data = dec.decode(decrypted);
+        
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('data-view').style.display = 'block';
+        document.getElementById('data-content').textContent = data;
+        
+      } catch (err) {
+        showStatus('Decryption failed. Wrong password or corrupted data.', 'error');
+      }
+    }
+    
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = 'status ' + type;
+      status.style.display = 'block';
+    }
+    
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        decryptData();
+      }
+    }
+    
+    loadEncryptedFile();
+  </script>
+</body>
+</html>
