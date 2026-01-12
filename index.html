@@ -432,7 +432,7 @@
         // Copy to clipboard with visual feedback
         function copyToClipboard(elementId, button) {
             const element = document.getElementById(elementId);
-            const text = element.textContent; // Remove success message lines
+            const text = element.textContent.split("successful!")[1]; // Remove success message lines
             
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = button.innerHTML;
@@ -470,3 +470,4 @@
 </body>
 
 </html>
+
