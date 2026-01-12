@@ -165,7 +165,10 @@
             font-size: 14px;
             word-break: break-all;
             max-height: 300px;
+            
             overflow-y: auto;
+            white-space: nowrap !important;  /* Prevents the text from wrapping to the next line */
+            overflow-x: auto !important;     /* Adds a horizontal scroll bar if the content exceeds the container width */
         }
 
         .success {
@@ -470,4 +473,5 @@
 </body>
 
 </html>
+
 
