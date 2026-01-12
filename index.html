@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Encryption Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        /* Tab Styles */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #333;
+        }
+
+        .tab {
+            background: #2d2d2d;
+            color: #b0b0b0;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s;
+            position: relative;
+            top: 2px;
+        }
+
+        .tab:hover {
+            background: #3d3d3d;
+            color: #e0e0e0;
+        }
+
+        .tab.active {
+            background: #4CAF50;
+            color: white;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            background: #2d2d2d;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .section h2 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.error {
+            background: #f44336;
+        }
+
+        button.error:hover {
+            background: #da190b;
+        }
+
+        button.success {
+            background: #4CAF50;
+        }
+
+        .output {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        .info {
+            color: #2196F3;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .readonly {
+            background: #252525 !important;
+            cursor: not-allowed;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Data Encryption Tool</h1>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('main')">Main View</button>
+            <button class="tab" onclick="switchTab('sandbox')">Sandbox Tools</button>
+        </div>
+
+        <!-- Main Tab: View Password Encrypted Data -->
+        <div id="main" class="tab-content active">
+            <div class="section">
+                <h2>View Password Encrypted Data</h2>
+                <div class="input-group">
+                    <label>Encrypted Data from ./data-encr.txt:</label>
+                    <textarea id="encryptedDataView" class="readonly" readonly placeholder="Loading encrypted data..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Enter Password to Decrypt:</label>
+                    <input type="password" id="viewPassword" placeholder="Enter decryption password">
+                </div>
+                <button id="mainDecryptBtn" onclick="decryptStoredData()">Decrypt & View</button>
+                <div id="decryptedOutput" class="output" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Sandbox Tab: Encrypt & Decrypt Tools -->
+        <div id="sandbox" class="tab-content">
+            <!-- Section 1: Encrypt Anything -->
+            <div class="section">
+                <h2>1. Encrypt Anything</h2>
+                <div class="input-group">
+                    <label>Paste Text Content:</label>
+                    <textarea id="textToEncrypt" placeholder="Enter the text you want to encrypt..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Enter Password:</label>
+                    <input type="password" id="encryptPassword" placeholder="Enter encryption password">
+                </div>
+                <button onclick="encryptData()">Encrypt</button>
+                <div id="encryptedOutput" class="output" style="display:none;"></div>
+                <div class="button-group" id="saveButtonGroup" style="display:none;">
+                    <button onclick="copyToClipboard('encryptedOutput', this)">📋 Copy to Clipboard</button>
+                    <button onclick="downloadEncrypted()">💾 Download as data-encr.txt</button>
+                </div>
+            </div>
+
+            <!-- Section 2: View Encrypted Data -->
+            <div class="section">
+                <h2>2. Decrypt Data</h2>
+                <div class="input-group">
+                    <label>Paste Encrypted Data:</label>
+                    <textarea id="encryptedDataInput" placeholder="Paste encrypted text here..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Enter Password:</label>
+                    <input type="password" id="decryptPassword" placeholder="Enter decryption password">
+                </div>
+                <button id="sandboxDecryptBtn" onclick="decryptData()">Decrypt & View</button>
+                <div id="decryptedDataOutput" class="output" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            if (tabName === 'main') {
+                tabs[0].classList.add('active');
+                document.getElementById('main').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('sandbox').classList.add('active');
+            }
+        }
+
+        // Load encrypted data from file on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('./data-encr.txt')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('File not found');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('encryptedDataView').value = data;
+                })
+                .catch(error => {
+                    document.getElementById('encryptedDataView').value = 'No encrypted file found. Create one using sandbox tools.';
+                });
+        });
+
+        // Encrypt data (Section 1)
+        function encryptData() {
+            const text = document.getElementById('textToEncrypt').value;
+            const password = document.getElementById('encryptPassword').value;
+            const output = document.getElementById('encryptedOutput');
+            const saveButtons = document.getElementById('saveButtonGroup');
+
+            if (!text.trim()) {
+                output.innerHTML = '<span class="error">❌ Please enter text to encrypt</span>';
+                output.style.display = 'block';
+                saveButtons.style.display = 'none';
+                return;
+            }
+
+            if (!password) {
+                output.innerHTML = '<span class="error">❌ Please enter a password</span>';
+                output.style.display = 'block';
+                saveButtons.style.display = 'none';
+                return;
+            }
+
+            try {
+                const encrypted = CryptoJS.AES.encrypt(text, password).toString();
+                output.innerHTML = '<span class="success">✅ Encryption successful!</span><br><br>' + encrypted;
+                output.style.display = 'block';
+                saveButtons.style.display = 'flex';
+            } catch (error) {
+                output.innerHTML = '<span class="error">❌ Encryption failed</span>';
+                output.style.display = 'block';
+                saveButtons.style.display = 'none';
+            }
+        }
+
+        // Decrypt data from file (Main Tab)
+        function decryptStoredData() {
+            const encryptedData = document.getElementById('encryptedDataView').value;
+            const password = document.getElementById('viewPassword').value;
+            const output = document.getElementById('decryptedOutput');
+            const btn = document.getElementById('mainDecryptBtn');
+
+            if (!encryptedData.trim() || encryptedData.includes('No encrypted file found')) {
+                output.innerHTML = '<span class="error">❌ No encrypted data available</span>';
+                output.style.display = 'block';
+                return;
+            }
+
+            if (!password) {
+                output.innerHTML = '<span class="error">❌ Please enter a password</span>';
+                output.style.display = 'block';
+                return;
+            }
+
+            try {
+                const decrypted = CryptoJS.AES.decrypt(encryptedData, password);
+                const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+                if (!decryptedText) {
+                    output.innerHTML = '<span class="error">🚫 ACCESS DENIED - Invalid password</span>';
+                    output.style.display = 'block';
+                    btn.classList.add('error');
+                    btn.classList.remove('success');
+                    return;
+                }
+
+                output.innerHTML = '<span class="success">✅ Decryption successful!</span><br><br><pre>' + decryptedText + '</pre>';
+                output.style.display = 'block';
+                btn.classList.remove('error');
+                btn.classList.add('success');
+                
+                // Scroll to show the decrypted data from the beginning
+                setTimeout(() => {
+                    output.scrollTop = 0;
+                    output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            } catch (error) {
+                output.innerHTML = '<span class="error">🚫 ACCESS DENIED - Invalid password or corrupted data</span>';
+                output.style.display = 'block';
+                btn.classList.add('error');
+                btn.classList.remove('success');
+            }
+        }
+
+        // Decrypt pasted data (Section 2)
+        function decryptData() {
+            const encryptedData = document.getElementById('encryptedDataInput').value;
+            const password = document.getElementById('decryptPassword').value;
+            const output = document.getElementById('decryptedDataOutput');
+            const btn = document.getElementById('sandboxDecryptBtn');
+
+            if (!encryptedData.trim()) {
+                output.innerHTML = '<span class="error">❌ Please paste encrypted data</span>';
+                output.style.display = 'block';
+                return;
+            }
+
+            if (!password) {
+                output.innerHTML = '<span class="error">❌ Please enter a password</span>';
+                output.style.display = 'block';
+                return;
+            }
+
+            try {
+                const decrypted = CryptoJS.AES.decrypt(encryptedData, password);
+                const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+                if (!decryptedText) {
+                    output.innerHTML = '<span class="error">🚫 ACCESS DENIED - Invalid password</span>';
+                    output.style.display = 'block';
+                    btn.classList.add('error');
+                    btn.classList.remove('success');
+                    return;
+                }
+
+                output.innerHTML = '<span class="success">✅ Decryption successful!</span><br><br><pre>' + decryptedText + '</pre>';
+                output.style.display = 'block';
+                btn.classList.remove('error');
+                btn.classList.add('success');
+                
+                // Scroll to show the decrypted data from the beginning
+                setTimeout(() => {
+                    output.scrollTop = 0;
+                    output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            } catch (error) {
+                output.innerHTML = '<span class="error">🚫 ACCESS DENIED - Invalid password or corrupted data</span>';
+                output.style.display = 'block';
+                btn.classList.add('error');
+                btn.classList.remove('success');
+            }
+        }
+
+        // Copy to clipboard with visual feedback
+        function copyToClipboard(elementId, button) {
+            const element = document.getElementById(elementId);
+            const lines = element.textContent.split('\n');
+            const text = lines.slice(2).join('\n').trim(); // Remove success message lines
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.background = '#4CAF50';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                button.innerHTML = '❌ Failed';
+                setTimeout(() => {
+                    button.innerHTML = '📋 Copy to Clipboard';
+                }, 2000);
+            });
+        }
+
+        // Download encrypted data as file
+        function downloadEncrypted() {
+            const output = document.getElementById('encryptedOutput');
+            const lines = output.textContent.split('\n');
+            const text = lines.slice(2).join('\n').trim(); // Remove success message lines
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data-encr.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
