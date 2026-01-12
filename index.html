@@ -199,7 +199,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔐 Data Encryption Tool</h1>
+        <h1>🔐 Admin View With Data Encryption Tool</h1>
 
         <!-- Tabs -->
         <div class="tabs">
@@ -432,8 +432,7 @@
         // Copy to clipboard with visual feedback
         function copyToClipboard(elementId, button) {
             const element = document.getElementById(elementId);
-            const lines = element.textContent.split('\n');
-            const text = lines.slice(2).join('\n').trim(); // Remove success message lines
+            const text = element.textContent; // Remove success message lines
             
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = button.innerHTML;
@@ -469,4 +468,5 @@
         }
     </script>
 </body>
+
 </html>
